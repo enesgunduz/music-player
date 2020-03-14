@@ -7,7 +7,8 @@ const image = document.querySelector('.img');
 const duration = document.querySelector('.time-duration');
 const progressContainer = document.querySelector('.progress-container') 
 const progress = document.querySelector('.progress') 
-
+const currentSongTime = document.querySelector('.current-song-time');
+const songTime = document.querySelector('.song-time');
 
 //Song name
 let songs = ['Mekanın Sahibi','Extreme Ways','Everbody Knows','Butterflies','The Final Victory','Genius ft. Sia, Diplo, Labrinth','The Comeback Kid','Overdose','Human'];
@@ -88,12 +89,34 @@ function setProgress(e){
     const duration = audio.duration;
     audio.currentTime = (clickX / width) * duration; 
 }
+//Update Time
+function updateTime(e){
+    const{duration,currentTime} = e.srcElement;
+    const durmin = Math.floor(duration / 60);
+    const dursec = Math.floor(duration % 60);
 
+    const curmin = Math.floor(currentTime / 60);
+    const cursec = Math.floor(currentTime % 60);   
+
+    if(cursec < 10){
+        currentSongTime.textContent = `0${curmin}:0${cursec}`;
+    }else{
+        currentSongTime.textContent = `${curmin}:${cursec}`;
+    }
+
+    if(dursec < 10 && durmin < 10){
+        songTime.textContent = `0${durmin}:0${dursec}`;
+    }else{
+        songTime.textContent = `${durmin}:${dursec}`;
+    }
+
+}
 // Click on progress bar
 progressContainer.addEventListener('click', setProgress);
 
 //Time/Song update
 audio.addEventListener('timeupdate',updateProgress);
+audio.addEventListener('timeupdate',updateTime);
 
 //Song ends
 audio.addEventListener('ended',nextSong)
@@ -112,8 +135,3 @@ const isPlaying = playBtn.classList.contains('fa-play');
         pauseSong();
     }
 });
-
-
-
-
-
